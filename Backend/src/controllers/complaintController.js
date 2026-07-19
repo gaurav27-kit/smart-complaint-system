@@ -25,3 +25,21 @@ export const createComplaint = async (req, res) => {
     });
   }
 };
+export const getMyComplaints = async (req, res) => {
+  try {
+    const complaints = await Complaint.find({
+      createdBy: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: complaints.length,
+      complaints,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
